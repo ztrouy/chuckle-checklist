@@ -33,6 +33,9 @@ export const App = () => {
       <div className="app-heading-circle">
         <img className="app-logo" src={stevePic} alt="Good job Steve" />
       </div>
+      <h1 className="app-heading-text">
+        Chuckle Checklist
+      </h1>
     </div>
     <div className="joke-add-form"> 
       <input
@@ -50,6 +53,34 @@ export const App = () => {
       >
         Submit
       </button>
+    </div>
+    <div className="joke-lists-container">
+      <div className="joke-list-container">
+        <h2>
+          Untold
+          <span className="untold-count">
+            {untoldJokes.length}
+          </span>
+        </h2>
+        <ul>
+          {untoldJokes.map(joke => {
+            return <li className="joke-list-item">{joke.text}</li>
+          })}
+        </ul>
+      </div>
+      <div className="joke-list-container">
+        <h2>
+          Told
+          <span className="told-count">
+            {toldJokes.length}
+          </span>
+        </h2>
+        <ul>
+          {toldJokes.map(joke => {
+            return <li className="joke-list-item">{joke.text}</li>
+          })}
+        </ul>
+      </div>
     </div>
   </div>
   )
