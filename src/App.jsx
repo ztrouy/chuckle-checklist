@@ -37,6 +37,8 @@ export const App = () => {
         Chuckle Checklist
       </h1>
     </div>
+    <h2>Add Joke</h2>
+    <hr color="#ea3788"></hr>
     <div className="joke-add-form"> 
       <input
         className="joke-input"
@@ -62,9 +64,10 @@ export const App = () => {
             {untoldJokes.length}
           </span>
         </h2>
+        <hr color="#ea3788"></hr>
         <ul>
           {untoldJokes.map(joke => {
-            return <li className="joke-list-item">{joke.text}</li>
+            return <li className="joke-list-item" key={joke.id}><p className="joke-list-item-text">{joke.text}</p></li>
           })}
         </ul>
       </div>
@@ -75,9 +78,10 @@ export const App = () => {
             {toldJokes.length}
           </span>
         </h2>
+        <hr color="#ea3788"></hr>
         <ul>
           {toldJokes.map(joke => {
-            return <li className="joke-list-item">{joke.text}</li>
+            return <li className="joke-list-item" key={joke.id}><p className="joke-list-item-text">{joke.text}</p></li>
           })}
         </ul>
       </div>
