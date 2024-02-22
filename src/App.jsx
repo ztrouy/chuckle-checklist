@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { addNewJokeToDB, getAllJokes } from "./services/jokeService.jsx"
+import { addNewJokeToDB, editJoke, getAllJokes } from "./services/jokeService.jsx"
 import stevePic from "./assets/steve.png"
 
 export const App = () => {
@@ -9,18 +9,20 @@ export const App = () => {
   const [untoldJokes, setUntoldJokes] = useState([])
   const [toldJokes, setToldJokes] = useState([])
 
-  const submitJoke = async () => {
-    await addNewJokeToDB(newJoke)
-    setNewJoke("")
+  const refreshJokes = () => {
     getAllJokes().then(jokesArray => {
       setAllJokes(jokesArray)
     })
   }
+  
+  const submitJoke = async () => {
+    await addNewJokeToDB(newJoke)
+    setNewJoke("")
+    refreshJokes()
+  }
 
   useEffect(() => {
-    getAllJokes().then(jokesArray => {
-      setAllJokes(jokesArray)
-    })
+    refreshJokes()
   }, [])
 
   useEffect(() => {
@@ -71,7 +73,21 @@ export const App = () => {
         <hr color="#ea3788"></hr>
         <ul>
           {untoldJokes.map(joke => {
-            return <li className="joke-list-item" key={joke.id}><p className="joke-list-item-text">{joke.text}</p></li>
+            return (
+              <li className="joke-list-item" key={joke.id}>
+                <p className="joke-list-item-text">{joke.text}</p>
+                <div>
+                  <button 
+                    className="joke-list-action-toggle"
+                    onClick={() => {
+                      joke.told = true
+                      editJoke(joke).then(refreshJokes)
+                    }}
+                  >
+                    <i className="fa-regular fa-face-laugh" />
+                  </button>
+                </div>
+              </li>)
           })}
         </ul>
       </div>
@@ -85,7 +101,21 @@ export const App = () => {
         <hr color="#ea3788"></hr>
         <ul>
           {toldJokes.map(joke => {
-            return <li className="joke-list-item" key={joke.id}><p className="joke-list-item-text">{joke.text}</p></li>
+            return (
+            <li className="joke-list-item" key={joke.id}>
+              <p className="joke-list-item-text">{joke.text}</p>
+              <div>
+                  <button 
+                    className="joke-list-action-toggle"
+                    onClick={() => {
+                      joke.told = false
+                      editJoke(joke).then(refreshJokes)
+                    }}
+                  >
+                    <i className="fa-regular fa-face-meh" />
+                  </button>
+                </div>
+            </li>)
           })}
         </ul>
       </div>

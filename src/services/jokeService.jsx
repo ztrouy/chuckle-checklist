@@ -21,3 +21,15 @@ export const getAllJokes = async () => {
 
     return jokes
 }
+
+export const editJoke = async (editedJoke) => {
+    const putOptions = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(editedJoke)
+    }
+
+    await fetch(`http://localhost:8088/jokes/${editedJoke.id}`, putOptions)
+}
