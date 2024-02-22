@@ -9,7 +9,7 @@ export const App = () => {
   const [untoldJokes, setUntoldJokes] = useState([])
   const [toldJokes, setToldJokes] = useState([])
 
-  const refreshJokes = async () => {
+  const refreshJokes = () => {
     getAllJokes().then(jokesArray => {
       setAllJokes(jokesArray)
     })
@@ -81,11 +81,10 @@ export const App = () => {
                     className="joke-list-action-toggle"
                     onClick={() => {
                       joke.told = true
-                      editJoke(joke)
-                      refreshJokes()
+                      editJoke(joke).then(refreshJokes)
                     }}
                   >
-                    toggle
+                    <i className="fa-regular fa-face-laugh" />
                   </button>
                 </div>
               </li>)
@@ -110,11 +109,10 @@ export const App = () => {
                     className="joke-list-action-toggle"
                     onClick={() => {
                       joke.told = false
-                      editJoke(joke)
-                      refreshJokes()
+                      editJoke(joke).then(refreshJokes)
                     }}
                   >
-                    toggle
+                    <i className="fa-regular fa-face-meh" />
                   </button>
                 </div>
             </li>)
