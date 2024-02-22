@@ -12,20 +12,24 @@ export const App = () => {
   const submitJoke = async () => {
     await addNewJokeToDB(newJoke)
     setNewJoke("")
+    getAllJokes().then(jokesArray => {
+      setAllJokes(jokesArray)
+    })
   }
 
   useEffect(() => {
     getAllJokes().then(jokesArray => {
       setAllJokes(jokesArray)
-      
-      const currentUntoldJokes = jokesArray.filter(joke => joke.told === false)
-      setUntoldJokes(currentUntoldJokes)
-
-      const currentToldJokes = jokesArray.filter(joke => joke.told === true)
-      setToldJokes(currentToldJokes)
     })
+  }, [])
 
-  }, [submitJoke])
+  useEffect(() => {
+    const currentUntoldJokes = allJokes.filter(joke => joke.told === false)
+    setUntoldJokes(currentUntoldJokes)
+
+    const currentToldJokes = allJokes.filter(joke => joke.told === true)
+    setToldJokes(currentToldJokes)
+  }, [allJokes])
   
   return (
   <div className="app-container">
