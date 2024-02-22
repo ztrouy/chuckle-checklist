@@ -1,8 +1,13 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./App.css"
+import { addNewJokeToDB } from "./services/jokeService.jsx"
 
 export const App = () => {
   const [newJoke, setNewJoke] = useState("")
+
+  const submitJoke = async () => {
+    await addNewJokeToDB(newJoke)
+  }
   
   return <div className="joke-add-form"> 
   <input
@@ -13,5 +18,11 @@ export const App = () => {
       setNewJoke(event.target.value)
     }}
   />
+  <button
+    className="joke-input-submit"
+    onClick={submitJoke}
+  >
+    Submit
+  </button>
   </div>
 }
