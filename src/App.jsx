@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { addNewJokeToDB, editJoke, getAllJokes } from "./services/jokeService.jsx"
+import { addNewJokeToDB, editJoke, getAllJokes, removeJokeFromDB } from "./services/jokeService.jsx"
 import stevePic from "./assets/steve.png"
 
 export const App = () => {
@@ -78,6 +78,16 @@ export const App = () => {
                 <p className="joke-list-item-text">{joke.text}</p>
                 <div>
                   <button 
+                    className="joke-list-action-delete"
+                    onClick={() => {
+                      removeJokeFromDB(joke).then(refreshJokes)
+                    }}
+                  >
+                    <i className="fa-solid fa-trash" />
+                  </button>
+                </div>
+                <div>
+                  <button 
                     className="joke-list-action-toggle"
                     onClick={() => {
                       joke.told = true
@@ -104,6 +114,16 @@ export const App = () => {
             return (
             <li className="joke-list-item" key={joke.id}>
               <p className="joke-list-item-text">{joke.text}</p>
+              <div>
+                <button 
+                  className="joke-list-action-delete"
+                  onClick={() => {
+                    removeJokeFromDB(joke).then(refreshJokes)
+                  }}
+                >
+                  <i className="fa-solid fa-trash" />
+                </button>
+              </div>
               <div>
                   <button 
                     className="joke-list-action-toggle"
