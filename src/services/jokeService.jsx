@@ -22,16 +22,22 @@ export const getAllJokes = async () => {
     return jokes
 }
 
-export const editJoke = async (editedJoke) => {
+export const changeJokeToldState = async (jokeToChange) => {
+    if (jokeToChange.told === true) {
+        jokeToChange.told = false
+    } else {
+        jokeToChange.told = true
+    }
+
     const putOptions = {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(editedJoke)
+        body: JSON.stringify(jokeToChange)
     }
 
-    await fetch(`http://localhost:8088/jokes/${editedJoke.id}`, putOptions)
+    await fetch(`http://localhost:8088/jokes/${jokeToChange.id}`, putOptions)
 }
 
 export const removeJokeFromDB = async (jokeToDelete) => {
