@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { addNewJokeToDB, editJoke, getAllJokes, removeJokeFromDB } from "./services/jokeService.jsx"
+import { addNewJokeToDB, changeJokeToldState, getAllJokes, removeJokeFromDB } from "./services/jokeService.jsx"
 import stevePic from "./assets/steve.png"
 
 export const App = () => {
@@ -32,6 +32,38 @@ export const App = () => {
     const currentToldJokes = allJokes.filter(joke => joke.told === true)
     setToldJokes(currentToldJokes)
   }, [allJokes])
+
+  const deleteButton = (element) => {
+    return (
+      <div>
+        <button 
+          className="joke-list-action-delete"
+          onClick={() => {
+            removeJokeFromDB(element)
+            .then(refreshJokes)
+          }}
+        >
+          <i className="fa-solid fa-trash" />
+        </button>
+      </div>
+    )
+  }
+
+  const swapToldButton = (element) => {
+    return (
+      <div>
+        <button 
+          className="joke-list-action-toggle"
+          onClick={() => {
+            changeJokeToldState(element)
+            .then(refreshJokes)
+          }}
+        >
+          <i className="fa-regular fa-face-laugh" />
+        </button>
+      </div>
+    )
+  }
   
   return (
   <div className="app-container">
@@ -76,27 +108,8 @@ export const App = () => {
             return (
               <li className="joke-list-item" key={joke.id}>
                 <p className="joke-list-item-text">{joke.text}</p>
-                <div>
-                  <button 
-                    className="joke-list-action-delete"
-                    onClick={() => {
-                      removeJokeFromDB(joke).then(refreshJokes)
-                    }}
-                  >
-                    <i className="fa-solid fa-trash" />
-                  </button>
-                </div>
-                <div>
-                  <button 
-                    className="joke-list-action-toggle"
-                    onClick={() => {
-                      joke.told = true
-                      editJoke(joke).then(refreshJokes)
-                    }}
-                  >
-                    <i className="fa-regular fa-face-laugh" />
-                  </button>
-                </div>
+                {deleteButton(joke)}
+                {swapToldButton(joke)}
               </li>)
           })}
         </ul>
@@ -114,27 +127,8 @@ export const App = () => {
             return (
             <li className="joke-list-item" key={joke.id}>
               <p className="joke-list-item-text">{joke.text}</p>
-              <div>
-                <button 
-                  className="joke-list-action-delete"
-                  onClick={() => {
-                    removeJokeFromDB(joke).then(refreshJokes)
-                  }}
-                >
-                  <i className="fa-solid fa-trash" />
-                </button>
-              </div>
-              <div>
-                  <button 
-                    className="joke-list-action-toggle"
-                    onClick={() => {
-                      joke.told = false
-                      editJoke(joke).then(refreshJokes)
-                    }}
-                  >
-                    <i className="fa-regular fa-face-meh" />
-                  </button>
-                </div>
+              {deleteButton(joke)}
+              {swapToldButton(joke)}
             </li>)
           })}
         </ul>
