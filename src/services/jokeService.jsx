@@ -33,3 +33,15 @@ export const editJoke = async (editedJoke) => {
 
     await fetch(`http://localhost:8088/jokes/${editedJoke.id}`, putOptions)
 }
+
+export const removeJokeFromDB = async (jokeToDelete) => {
+    const deleteOptions = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(jokeToDelete)
+    }
+
+    await fetch(`http://localhost:8088/jokes/${jokeToDelete.id}`, deleteOptions)
+}
