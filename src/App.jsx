@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react"
 import "./App.css"
-import { addNewJokeToDB, changeJokeToldState, getAllJokes, removeJokeFromDB } from "./services/jokeService.jsx"
-import stevePic from "./assets/steve.png"
+import { getAllJokes } from "./services/jokeService.jsx"
+import { JokesList } from "./components/lists/JokesList.jsx"
+import { Header } from "./components/header/Header.jsx"
+import { AddJoke } from "./components/input/AddJoke.jsx"
 
 export const App = () => {
   const [newJoke, setNewJoke] = useState("")
   const [allJokes, setAllJokes] = useState([])
-  const [untoldJokes, setUntoldJokes] = useState([])
-  const [toldJokes, setToldJokes] = useState([])
+
+
+  useEffect(() => {
+    refreshJokes()
+  }, [])
+
 
   const refreshJokes = () => {
     getAllJokes().then(jokesArray => {
@@ -15,125 +21,12 @@ export const App = () => {
     })
   }
   
-  const submitJoke = async () => {
-    await addNewJokeToDB(newJoke)
-    setNewJoke("")
-    refreshJokes()
-  }
 
-  useEffect(() => {
-    refreshJokes()
-  }, [])
-
-  useEffect(() => {
-    const currentUntoldJokes = allJokes.filter(joke => joke.told === false)
-    setUntoldJokes(currentUntoldJokes)
-
-    const currentToldJokes = allJokes.filter(joke => joke.told === true)
-    setToldJokes(currentToldJokes)
-  }, [allJokes])
-
-  const deleteButton = (element) => {
-    return (
-      <div>
-        <button 
-          className="joke-list-action-delete"
-          onClick={() => {
-            removeJokeFromDB(element)
-            .then(refreshJokes)
-          }}
-        >
-          <i className="fa-solid fa-trash" />
-        </button>
-      </div>
-    )
-  }
-
-  const swapToldButton = (element) => {
-    return (
-      <div>
-        <button 
-          className="joke-list-action-toggle"
-          onClick={() => {
-            changeJokeToldState(element)
-            .then(refreshJokes)
-          }}
-        >
-          <i className="fa-regular fa-face-laugh" />
-        </button>
-      </div>
-    )
-  }
-  
   return (
-  <div className="app-container">
-    <div className="app-heading">
-      <div className="app-heading-circle">
-        <img className="app-logo" src={stevePic} alt="Good job Steve" />
-      </div>
-      <h1 className="app-heading-text">
-        Chuckle Checklist
-      </h1>
+    <div className="app-container">
+      <Header />
+      <AddJoke newJoke={newJoke} setNewJoke={setNewJoke} refreshJokes={refreshJokes} />
+      <JokesList allJokes={allJokes} refreshJokes={refreshJokes} />
     </div>
-    <h2>Add Joke</h2>
-    <hr color="#ea3788"></hr>
-    <div className="joke-add-form"> 
-      <input
-        className="joke-input"
-        type="text"
-        placeholder="New One Liner"
-        value={newJoke}
-        onChange={event => {
-          setNewJoke(event.target.value)
-        }}
-      />
-      <button
-        className="joke-input-submit"
-        onClick={submitJoke}
-      >
-        Submit
-      </button>
-    </div>
-    <div className="joke-lists-container">
-      <div className="joke-list-container">
-        <h2>
-          Untold
-          <span className="untold-count">
-            {untoldJokes.length}
-          </span>
-        </h2>
-        <hr color="#ea3788"></hr>
-        <ul>
-          {untoldJokes.map(joke => {
-            return (
-              <li className="joke-list-item" key={joke.id}>
-                <p className="joke-list-item-text">{joke.text}</p>
-                {deleteButton(joke)}
-                {swapToldButton(joke)}
-              </li>)
-          })}
-        </ul>
-      </div>
-      <div className="joke-list-container">
-        <h2>
-          Told
-          <span className="told-count">
-            {toldJokes.length}
-          </span>
-        </h2>
-        <hr color="#ea3788"></hr>
-        <ul>
-          {toldJokes.map(joke => {
-            return (
-            <li className="joke-list-item" key={joke.id}>
-              <p className="joke-list-item-text">{joke.text}</p>
-              {deleteButton(joke)}
-              {swapToldButton(joke)}
-            </li>)
-          })}
-        </ul>
-      </div>
-    </div>
-  </div>
   )
 }
